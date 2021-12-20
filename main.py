@@ -10,22 +10,24 @@ def get_shopping_list_by_dishes(dishes: list, persons: int, cook_book: dict) -> 
                     shopping_list[ingredient['ingredient_name']] = {'measure': ingredient['measure'], 'quantity': (ingredient['quantity'] * persons)}
                 else:
                     shopping_list[ingredient['ingredient_name']]['quantity'] += (ingredient['quantity'] * persons)
+        else:
+            print(f'Нет рецепта для блюда: {dish}')
     return shopping_list
 
 
-def creat_cook_book(file_name='recipes.txt', separator_for_file='', separator=' | ') -> dict:
+def creat_cook_book(file_name='recipes.txt', separator_for_file='', str_separator=' | ') -> dict:
     """Возвращает словарь с рецептами, созданный на основе списка, полученного от функции 'read_recipes_from_file('file_name')' ."""
     cook_book = {}
     for dish_list in read_recipes_from_file(file_name, separator_for_file):
         cook_book[dish_list[0]] = []
         for i in range(1, len(dish_list)):
-            dish_list[i] = dish_list[i].split(separator)
+            dish_list[i] = dish_list[i].split(str_separator)
             dish_list[i] = {'ingredient_name': dish_list[i][0], 'quantity': int(dish_list[i][1]), 'measure': dish_list[i][2]}
             cook_book[dish_list[0]].append(dish_list[i])
     return cook_book
 
 
-def wright_shopping_list_to_file(dishes: list, persons: int, cook_book: dict, file_name='shopping_list.txt') -> None:
+def wright_shopping_list_to_file(dishes: list, persons: int, cook_book: dict, file_name='shopping_list.txt'):
     """Записывает словарь, полученный от функции 'get_shopping_list_by_dishes', в текстовый файл 'file_name'."""
     shopping_list = get_shopping_list_by_dishes(dishes, persons, cook_book)
     with open(file_name, 'wt', encoding='utf-8') as file:
@@ -55,6 +57,7 @@ def read_recipes_from_file(file_name='recipes.txt', separator='') -> list:
 
 list_of_dishes = ['Омлет', 'Утка по-пекински', 'Фахитос']
 
-print(creat_cook_book())
-print(get_shopping_list_by_dishes(list_of_dishes, 6, creat_cook_book()))
+# print(creat_cook_book())
+# print(get_shopping_list_by_dishes(list_of_dishes, 6, creat_cook_book()))
+
 wright_shopping_list_to_file(list_of_dishes, 6, creat_cook_book())
